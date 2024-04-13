@@ -3,6 +3,8 @@ package com.nithin.vaadinregisterloginnithin.entity;
 import java.time.LocalDate;
 import java.util.Set;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.Data;
 
 @Data
