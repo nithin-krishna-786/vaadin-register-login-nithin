@@ -52,6 +52,9 @@ public class RegistrationView extends VerticalLayout {
 	public RegistrationView() {
 
 		VerticalLayout layout = new VerticalLayout();
+		layout.setPadding(false); // Remove padding around the layout
+		layout.setSpacing(false); // Remove spacing between components
+		
 		layout.setSizeFull();
 		layout.setAlignItems(Alignment.CENTER);
 		layout.setJustifyContentMode(JustifyContentMode.CENTER);
