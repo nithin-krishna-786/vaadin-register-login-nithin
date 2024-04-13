@@ -17,6 +17,7 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.Notification.Position;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.textfield.PasswordField;
@@ -43,6 +44,7 @@ public class RegistrationView extends VerticalLayout {
 	private CheckboxGroup<String> locationPreferences;
 	private RadioButtonGroup<String> paymentMethod;
 	private Button registerButton;
+	private Button clearButton;
 
 	private Binder<User> binder = new Binder<>(User.class);
 
@@ -52,6 +54,7 @@ public class RegistrationView extends VerticalLayout {
 	public RegistrationView() {
 
 		VerticalLayout layout = new VerticalLayout();
+		//MINIMAL SPACING AND PADDDING
 		layout.setPadding(false); // Remove padding around the layout
 		layout.setSpacing(false); // Remove spacing between components
 		
@@ -96,9 +99,13 @@ public class RegistrationView extends VerticalLayout {
 		paymentMethod.setItems("Cash", "Credit Card", "UPI");
 
 		registerButton = new Button("Register");
+		clearButton = new Button("Clear");
+		
+		HorizontalLayout hl = new HorizontalLayout(registerButton,clearButton);
+		
 		// Add components to the layout
 		layout.add(username, password, email, phoneNumber, dateOfBirth, genderRadioGroup, examPreference, locationPreferences,
-				paymentMethod, registerButton);
+				paymentMethod,hl);
 		
 		add(layout);
 		
@@ -163,6 +170,19 @@ public class RegistrationView extends VerticalLayout {
         binder.forField(paymentMethod)
             .asRequired("Payment method is required")
             .bind(User::getPaymentMethod, User::setPaymentMethod);
+        
+        clearButton.addClickListener( e ->
+        {
+        	username.clear();
+        	password.clear();
+        	email.clear();
+        	phoneNumber.clear();
+        	dateOfBirth.clear();
+        	genderRadioGroup.clear();
+        	examPreference.clear();
+        	locationPreferences.clear();
+        	paymentMethod.clear();
+        });
 
         // Handle form submission
         registerButton.addClickListener(event -> {
