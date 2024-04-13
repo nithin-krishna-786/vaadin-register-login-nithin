@@ -13,6 +13,8 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.Notification.Position;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -49,9 +51,15 @@ public class RegistrationView extends VerticalLayout {
 
 	public RegistrationView() {
 
+		VerticalLayout layout = new VerticalLayout();
+		layout.setSizeFull();
+		layout.setAlignItems(Alignment.CENTER);
+		layout.setJustifyContentMode(JustifyContentMode.CENTER);
+
 		// Create form fields
 		username = new TextField("Username");
 		username.setRequiredIndicatorVisible(true);
+		
 		password = new PasswordField("Password");
 		email = new EmailField("Email");
 		email.setRequired(true);
@@ -86,8 +94,11 @@ public class RegistrationView extends VerticalLayout {
 
 		registerButton = new Button("Register");
 		// Add components to the layout
-		add(username, password, email, phoneNumber, dateOfBirth, genderRadioGroup, examPreference, locationPreferences,
+		layout.add(username, password, email, phoneNumber, dateOfBirth, genderRadioGroup, examPreference, locationPreferences,
 				paymentMethod, registerButton);
+		
+		add(layout);
+		
 
 //OLD
 //		registerButton.addClickListener(e -> {
