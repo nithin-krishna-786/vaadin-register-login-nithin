@@ -30,8 +30,7 @@ import com.vaadin.flow.component.textfield.*;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 
-@Route("")
-@RouteAlias("register")
+@Route("register")
 public class RegistrationView extends VerticalLayout {
 
 	private TextField username;
@@ -41,7 +40,7 @@ public class RegistrationView extends VerticalLayout {
 	private DatePicker dateOfBirth;
 	private RadioButtonGroup<String> genderRadioGroup;
 	private ComboBox<String> examPreference;
-	private CheckboxGroup<String> locationPreferences;
+	private RadioButtonGroup<String> locationPreferences;
 	private RadioButtonGroup<String> paymentMethod;
 	private Button registerButton;
 	private Button clearButton;
@@ -90,7 +89,7 @@ public class RegistrationView extends VerticalLayout {
 		examPreference.setAllowCustomValue(false);
 		examPreference.setRequiredIndicatorVisible(true);
 
-		locationPreferences = new CheckboxGroup<>();
+		locationPreferences = new RadioButtonGroup<>();
 		locationPreferences.setLabel("Location Preferences");
 		locationPreferences.setItems("London", "New York", "Paris");
 

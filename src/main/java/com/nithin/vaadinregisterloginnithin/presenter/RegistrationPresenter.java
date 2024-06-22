@@ -33,7 +33,7 @@ public class RegistrationPresenter {
 	}
 
 	private void registerUser(User user) {
-		userService.createUser(user);
+		user = userService.createUser(user);
 //		view.showNotification("Registration successful");
 		Notification.show("Registration successful!", 3000, Position.BOTTOM_START);
 	}
