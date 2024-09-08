@@ -75,6 +75,10 @@ public class LoginView extends VerticalLayout {
         registerButton.addClickListener(event -> {
             UI.getCurrent().navigate("register");
         });
+        
+        loginButton.addClickListener(event -> {
+            UI.getCurrent().navigate("loggedin");
+        });
 	}
 
 

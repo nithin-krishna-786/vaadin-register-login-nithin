@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.nithin.vaadinregisterloginnithin.entity.User;
 import com.nithin.vaadinregisterloginnithin.events.RegistrationEvent;
 import com.nithin.vaadinregisterloginnithin.presenter.RegistrationPresenter;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -44,6 +45,7 @@ public class RegistrationView extends VerticalLayout {
 	private RadioButtonGroup<String> paymentMethod;
 	private Button registerButton;
 	private Button clearButton;
+	private Button homeButton;
 
 	private Binder<User> binder = new Binder<>(User.class);
 
@@ -53,10 +55,10 @@ public class RegistrationView extends VerticalLayout {
 	public RegistrationView() {
 
 		VerticalLayout layout = new VerticalLayout();
-		//MINIMAL SPACING AND PADDDING
+		// MINIMAL SPACING AND PADDDING
 		layout.setPadding(false); // Remove padding around the layout
 		layout.setSpacing(false); // Remove spacing between components
-		
+
 		layout.setSizeFull();
 		layout.setAlignItems(Alignment.CENTER);
 		layout.setJustifyContentMode(JustifyContentMode.CENTER);
@@ -64,7 +66,7 @@ public class RegistrationView extends VerticalLayout {
 		// Create form fields
 		username = new TextField("Username");
 		username.setRequiredIndicatorVisible(true);
-		
+
 		password = new PasswordField("Password");
 		email = new EmailField("Email");
 		email.setRequired(true);
@@ -72,8 +74,8 @@ public class RegistrationView extends VerticalLayout {
 		phoneNumber = new TextField("Phone Number");
 		phoneNumber.setPattern("\\d*"); // Allow digits only
 		phoneNumber.setErrorMessage("Invalid phone number");
-		phoneNumber.setMaxLength(12); 
-		
+		phoneNumber.setMaxLength(12);
+
 		dateOfBirth = new DatePicker("Date of Birth");
 		dateOfBirth.setClearButtonVisible(true);
 		dateOfBirth.setPlaceholder("Select a date");
@@ -99,15 +101,15 @@ public class RegistrationView extends VerticalLayout {
 
 		registerButton = new Button("Register");
 		clearButton = new Button("Clear");
-		
-		HorizontalLayout hl = new HorizontalLayout(registerButton,clearButton);
-		
+		homeButton = new Button("Home");
+
+		HorizontalLayout hl = new HorizontalLayout(registerButton, clearButton, homeButton);
+
 		// Add components to the layout
-		layout.add(username, password, email, phoneNumber, dateOfBirth, genderRadioGroup, examPreference, locationPreferences,
-				paymentMethod,hl);
-		
+		layout.add(username, password, email, phoneNumber, dateOfBirth, genderRadioGroup, examPreference,
+				locationPreferences, paymentMethod, hl);
+
 		add(layout);
-		
 
 //OLD
 //		registerButton.addClickListener(e -> {
@@ -124,87 +126,85 @@ public class RegistrationView extends VerticalLayout {
 //			this.registerButtonClicked(user);
 //		});
 //OLD		
-		
-		   // Bind fields to the binder
-        binder.forField(username)
-            .asRequired("Username is required")
-            .bind(User::getUsername, User::setUsername);
 
-        binder.forField(password)
-            .asRequired("Password is required")
-            .bind(User::getPassword, User::setPassword);
+		// Bind fields to the binder
+		binder.forField(username).asRequired("Username is required").bind(User::getUsername, User::setUsername);
 
-        binder.forField(email)
-            .asRequired("Email is required")
-            .withValidator(new EmailValidator("This doesn't look like a valid email address"))
-            .bind(User::getEmail, User::setEmail);
-        
-     // Bind the phoneNumber field
-        binder.forField(phoneNumber)
-            .asRequired("Phone number is required")
-            .withValidator(new RegexpValidator("Invalid phone number", "\\d*"))
-            .bind(User::getPhoneNumber, User::setPhoneNumber);
+		binder.forField(password).asRequired("Password is required").bind(User::getPassword, User::setPassword);
 
-        // Bind the dateOfBirth field
-        binder.forField(dateOfBirth)
-            .asRequired("Date of birth is required")
-            .bind(User::getDateOfBirth, User::setDateOfBirth);
+		binder.forField(email).asRequired("Email is required")
+				.withValidator(new EmailValidator("This doesn't look like a valid email address"))
+				.bind(User::getEmail, User::setEmail);
 
-        // Bind the genderRadioGroup field
-        binder.forField(genderRadioGroup)
-            .asRequired("Gender is required")
-            .bind(User::getGender, User::setGender);
+		// Bind the phoneNumber field
+		binder.forField(phoneNumber).asRequired("Phone number is required")
+				.withValidator(new RegexpValidator("Invalid phone number", "\\d*"))
+				.bind(User::getPhoneNumber, User::setPhoneNumber);
 
-        // Bind the examPreference field
-        binder.forField(examPreference)
-            .asRequired("Exam preference is required")
-            .bind(User::getExamPreference, User::setExamPreference);
+		// Bind the dateOfBirth field
+		binder.forField(dateOfBirth).asRequired("Date of birth is required").bind(User::getDateOfBirth,
+				User::setDateOfBirth);
 
-        // Bind the locationPreferences field
-        binder.forField(locationPreferences)
-            .asRequired("Location preference is required")
-            .bind(User::getLocationPreferences, User::setLocationPreferences);
+		// Bind the genderRadioGroup field
+		binder.forField(genderRadioGroup).asRequired("Gender is required").bind(User::getGender, User::setGender);
 
-        // Bind the paymentMethod field
-        binder.forField(paymentMethod)
-            .asRequired("Payment method is required")
-            .bind(User::getPaymentMethod, User::setPaymentMethod);
-        
-        clearButton.addClickListener( e ->
-        {
-        	username.clear();
-        	password.clear();
-        	email.clear();
-        	phoneNumber.clear();
-        	dateOfBirth.clear();
-        	genderRadioGroup.clear();
-        	examPreference.clear();
-        	locationPreferences.clear();
-        	paymentMethod.clear();
-        });
+		// Bind the examPreference field
+		binder.forField(examPreference).asRequired("Exam preference is required").bind(User::getExamPreference,
+				User::setExamPreference);
 
-        // Handle form submission
-        registerButton.addClickListener(event -> {
-            if (binder.validate().isOk()) {
-                // Proceed with registration
-                User user = new User();
-                binder.writeBeanIfValid(user);
-                registerButtonClicked(user);
-                binder.readBean(null); // Clear the form
-            } else {
-                // Show validation errors
-                BinderValidationStatus<User> status = binder.validate();
-                String errorMessages = status.getValidationErrors().stream()
-                                             .map(ValidationResult::getErrorMessage)
-                                             .collect(Collectors.joining(","));
-                Notification.show("Please correct the following errors:\n" + errorMessages, 5000, Position.BOTTOM_START);
-            }
-        });
+		// Bind the locationPreferences field
+		binder.forField(locationPreferences).asRequired("Location preference is required")
+				.bind(User::getLocationPreferences, User::setLocationPreferences);
+
+		// Bind the paymentMethod field
+		binder.forField(paymentMethod).asRequired("Payment method is required").bind(User::getPaymentMethod,
+				User::setPaymentMethod);
+
+		clearButton.addClickListener(e -> {
+			username.clear();
+			password.clear();
+			email.clear();
+			phoneNumber.clear();
+			dateOfBirth.clear();
+			genderRadioGroup.clear();
+			examPreference.clear();
+			locationPreferences.clear();
+			paymentMethod.clear();
+		});
+
+		// Handle form submission
+		registerButton.addClickListener(event -> {
+			if (binder.validate().isOk()) {
+				// Proceed with registration
+				User user = new User();
+				binder.writeBeanIfValid(user);
+				registerButtonClicked(user);
+				binder.readBean(null); // Clear the form
+			} else {
+				// Show validation errors
+				BinderValidationStatus<User> status = binder.validate();
+				String errorMessages = status.getValidationErrors().stream().map(ValidationResult::getErrorMessage)
+						.collect(Collectors.joining(","));
+				Notification.show("Please correct the following errors:\n" + errorMessages, 5000,
+						Position.BOTTOM_START);
+			}
+		});
+
+		homeButton.addAttachListener(event -> {
+			UI.getCurrent().navigate("login");
+		});
 
 	}
 
 	private void registerButtonClicked(User user) {
 		presenter.onEvent(new RegistrationEvent(RegistrationEvent.Type.SUBMIT, user));
+		backToLogin();
+	}
+
+	private void backToLogin() {
+		registerButton.addClickListener(event -> {
+			UI.getCurrent().navigate("login");
+		});
 	}
 
 	public void showNotification(String message) {
